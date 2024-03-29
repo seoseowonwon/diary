@@ -4,8 +4,14 @@
 <%@ page import = "java.util.*" %>
 <%
 	// login(인증) 분기
+	String loginMember = (String)(session.getAttribute("loginMember"));
+	if(loginMember == null){
+			String errMsg = URLEncoder.encode("잘못된접근");
+			response.sendRedirect("/diary/diary.jsp");
+			return;
+	}
 	// diary.login.my_session (DB이름, 테이블, 컬럼) => my_session의 값이 OFF이면 -> redirect ("loginForm.jsp")으로 이동
-	String sql1 = "select my_session mySession from login"; //mySession같은 경우 아이어스 별칭
+	/*String sql1 = "select my_session mySession from login"; //mySession같은 경우 아이어스 별칭
 	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = null;
 	PreparedStatement stmt1 = null;
@@ -30,8 +36,11 @@
 		conn.close();
 		return; // 코드 진행을 끝내는 문법
 	} 
-	// if문에 걸리지 않을 때..
-	
+	// if문에 걸리지 않을 때..*/
+%>
+
+<%	
+
 	
 	// 1. 요청 분석
 		// 출력하고자는 달력의 년과 월값을 넘겨받음
@@ -75,6 +84,13 @@
 		
 		//tYear와 tMonth에 해당되는 diary 목록을 DB에서 가져옴 
 		String sql2 = "select diary_date diaryDate, DAY(diary_date) DAY , feeling, left(title, 3) title from diary where year(diary_date) = ? and month(diary_date) = ? ";
+		
+		Class.forName("org.mariadb.jdbc.Driver");
+		Connection conn = null;
+		conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
+		
+		
+		
 		PreparedStatement stmt2 = null;
 		ResultSet rs2 = null;
 		stmt2 = conn.prepareStatement(sql2);

@@ -6,7 +6,7 @@
 	
 // login(인증) 분기
 	// diary.login.my_session (DB이름, 테이블, 컬럼) => my_session의 값이 OFF이면 -> redirect ("loginForm.jsp")으로 이동
-	String sql1 = "select my_session mySession from login"; //mySession같은 경우 아이어스 별칭
+	/*String sql1 = "select my_session mySession from login"; //mySession같은 경우 아이어스 별칭
 	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
 	
@@ -26,15 +26,27 @@
 		response.sendRedirect("/diary/loginForm.jsp?errMsg="+errMsg); // 
 		
 		return; // 코드 진행을 끝내는 문법
-	} 
+	} */
 	
+	//session login
+	String loginMember = (String)(session.getAttribute("loginMember"));
+	if(loginMember == null){
+		String errMsg = URLEncoder.encode("잘못된접근");
+		response.sendRedirect("/diary/diary.jsp");
+		return;
+	}
+%>
+
+<%
+
+
 	// 어떤 값들을 가져올 거
 	String diaryDate = request.getParameter("diaryDate");
 	System.out.println("diaryOne diaryDate --> "+diaryDate);
 	String sql2 = "select diary_date diaryDate, title, weather, content, update_date updateDate, create_date createDate from diary where diary_date = ?";
 	System.out.println(sql2);
-	
-	
+	Class.forName("org.mariadb.jdbc.Driver");
+	Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
 	PreparedStatement stmt2 = conn.prepareStatement(sql2);
 	// 문자열 쿼리안에 ?(표현식을 값으로 치환)
 	stmt2.setString(1, diaryDate);

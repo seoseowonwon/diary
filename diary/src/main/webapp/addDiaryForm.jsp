@@ -5,7 +5,7 @@
 // 0. 로그인(인증) 분기
 // diary.login.my_session => 'OFF' => redirect("loginForm.jsp")
 
-	String sql1 = "select my_session mySession from login";
+	/*String sql1 = "select my_session mySession from login";
 	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = null;
 	PreparedStatement stmt1 = null;
@@ -23,6 +23,13 @@
 		String errMsg = URLEncoder.encode("잘못된 접근 입니다. 로그인 먼저 해주세요", "utf-8");
 		response.sendRedirect("/diary/loginForm.jsp?errMsg="+errMsg);
 		return; // 코드 진행을 끝내는 문법 ex) 메서드 끝낼때 return사용
+	}*/
+	
+	String loginMember = (String)(session.getAttribute("loginMember"));
+	if(loginMember == null){
+		String errMsg = URLEncoder.encode("잘못된접근");
+		response.sendRedirect("/diary/diary.jsp");
+		return;
 	}
 %>
 
@@ -144,11 +151,11 @@
 						%>
 					</div>
 					<div>
-						기분 : <input type="radio" name="feeling" value="&#128512;">&#128512;
-						기분 : <input type="radio" name="feeling" value="&#128513;">&#128513;
-						기분 : <input type="radio" name="feeling" value="&#128514;">&#128514;
-						기분 : <input type="radio" name="feeling" value="&#128515;">&#128515;
-						기분 : <input type="radio" name="feeling" value="&#128516;">&#128516;
+						기분 : <input type="radio" name="feeling" value="&#128512;">&#128528;
+						기분 : <input type="radio" name="feeling" value="&#128513;">&#128525;
+						기분 : <input type="radio" name="feeling" value="&#128514;">&#128530;
+						기분 : <input type="radio" name="feeling" value="&#128515;">&#128545;
+						기분 : <input type="radio" name="feeling" value="&#128516;">&#128557;
 					</div>
 					<div>
 						<select name="weather">

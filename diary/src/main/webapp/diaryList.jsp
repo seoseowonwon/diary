@@ -5,7 +5,7 @@
 	// 0. 로그인(인증) 분기
 	// diary.login.my_session => 'OFF' => redirect("loginForm.jsp")
 	
-	String sql1 = "select my_session mySession from login";
+	/*String sql1 = "select my_session mySession from login";
 	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = null;
 	PreparedStatement stmt1 = null;
@@ -23,6 +23,14 @@
 		String errMsg = URLEncoder.encode("잘못된 접근 입니다. 로그인 먼저 해주세요", "utf-8");
 		response.sendRedirect("/diary/loginForm.jsp?errMsg="+errMsg);
 		return; // 코드 진행을 끝내는 문법 ex) 메서드 끝낼때 return사용
+	}*/
+	
+	//session login
+	String loginMember = (String)(session.getAttribute("loginMember"));
+	if(loginMember == null){
+		String errMsg = URLEncoder.encode("잘못된접근");
+		response.sendRedirect("/diary/diary.jsp");
+		return;
 	}
 %>	
 
@@ -54,8 +62,12 @@
 		limit ?, ?
 	*/
 	String sql2 = "select diary_date diaryDate, title, update_date updateDate, create_date createDate from diary where title like ? order by diary_date desc limit ?, ?";
+	Class.forName("org.mariadb.jdbc.Driver");
 	PreparedStatement stmt2 = null;
 	ResultSet rs2 = null;
+	Connection conn = null;
+	conn = DriverManager.getConnection( "jdbc:mariadb://127.0.0.1:3306/diary", "root", "java1234");
+	
 	stmt2 = conn.prepareStatement(sql2);
 	stmt2.setString(1, "%"+searchWord+"%");
 	stmt2.setInt(2, startRow);

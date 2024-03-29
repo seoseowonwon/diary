@@ -1,6 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*"%>
+<%@ page import="java.net.*" %>
+<%
 
+	String loginMember = (String)(session.getAttribute("loginMember"));
+	if(loginMember == null){
+		String errMsg = URLEncoder.encode("잘못된접근");
+		response.sendRedirect("/diary/diary.jsp");
+		return;
+	}
+%>
 <%
 	String diaryDate = request.getParameter("diaryDate");
 	System.out.println("updateDiaryForm diaryDate --> "+diaryDate);

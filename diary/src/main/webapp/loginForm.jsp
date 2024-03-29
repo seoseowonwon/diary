@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import ="java.sql.*" %>
 
 <%
 	//0. login(인증) 분기
 	// diary.login.my_session (DB이름, 테이블, 컬럼) => my_ssion의 값이 ON이면 -> redirect ("diary.jsp")으로 이동
 	
-	String sql1 = "select my_session mySession from login"; //mySession같은 경우 아이어스 별칭
+	/*String sql1 = "select my_session mySession from login"; //mySession같은 경우 아이어스 별칭
 	Class.forName("org.mariadb.jdbc.Driver");
 	Connection conn = null;
 	PreparedStatement stmt1 = null;
@@ -32,7 +31,21 @@
 	//자원반납
 	rs1.close();
 	stmt1.close();
-	conn.close();
+	conn.close();*/
+	
+	// 로그인 분기 session사용으로 변경
+	// 로그인 성공시 세션에 loginMember라는 변수를 만들고 값으로 로그인 아이디를 저장.
+	String loginMember = (String) session.getAttribute("loginMember");
+	//session.getAttribute 찾는 변수가 없으면 null값을 반환
+	// null 이라면 로그아웃상태, != 로그인 상태
+	System.out.println("loginForm loginMember-->"+loginMember);
+	
+	//loginForm페이즌ㄴ 
+	if(loginMember != null){
+		response.sendRedirect("/diary/diary.jsp?");
+		return;
+	}
+	
 	
 	// 1. 요청값 분석
 	String errMsg = request.getParameter("errMsg");
