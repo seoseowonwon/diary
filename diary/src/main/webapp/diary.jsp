@@ -7,7 +7,7 @@
 	String loginMember = (String)(session.getAttribute("loginMember"));
 	if(loginMember == null){
 			String errMsg = URLEncoder.encode("잘못된접근");
-			response.sendRedirect("/diary/diary.jsp");
+			response.sendRedirect("/diary/loginForm.jsp");
 			return;
 	}
 	// diary.login.my_session (DB이름, 테이블, 컬럼) => my_session의 값이 OFF이면 -> redirect ("loginForm.jsp")으로 이동
@@ -214,7 +214,40 @@
 							}
 							if (i - startBlank > 0 && i <= lastDate + startBlank) {
 							%>
-								<%=i - startBlank%><br>
+								<!-- 
+									구상
+									diaryDate로 전송을 하는데 +로 문자열 처럼 보냄.
+									문제는 1월이나 1일을 00월 00일의 형식으로 변형해야함.
+									어떻게 한담? 
+									addDiaryForm으로 x명으로 연/월/일을 보내고 
+									addDiaryForm에서 diaryDate와 x가 같다면
+									error message를  redirect로 재전송.
+									
+									같지 않다면 그냥 보통 화면 출력.
+								 -->
+							<%
+								System.out.println("dairy i --> "+i);
+								System.out.println("dairy startBlank --> "+startBlank);
+								String day = null;
+								if((i - startBlank) < 10){ //i - startBlank는 일이다.
+									 day = "0" + (i-startBlank);
+									//디버깅
+									System.out.println("dairy day --> "+day);
+								} else {
+									day = "" + (i-startBlank);
+								}
+								String month = null;
+								System.out.println("dairy tMonth --> "+tMonth);
+								
+								if( tMonth+1 < 10){
+									month = "0" + (tMonth+1);
+									// 디버깅
+									System.out.println("dairy month --> "+month);
+								} else {
+									month = ""+(tMonth+1);
+								}
+							%>	 
+								<a href="/diary/addDiaryForm.jsp?diaryDate=<%=tYear%>-<%=month%>-<%=day%>"> <%=i - startBlank%> </a><br>
 							<%
 							
 								// 현재 날짜 (i-startBalnk)의 일기가 rs2목록에 있는지 비교하는 코드
@@ -235,8 +268,9 @@
 									}
 								}
 								rs2.beforeFirst(); // ResultSet의 커서 위치를 처음으로 되돌리는 소스코드.
+								
 							} else if (i - 1 - startBlank < 0) {
-							%>
+							%> <!-- 이전달, 다음달 의미 없는 숫자들 표시 -->
 							<div style="color: #BDBDBD"><%=mlastDay - startBlank + i%></div>
 							<%
 							} else {

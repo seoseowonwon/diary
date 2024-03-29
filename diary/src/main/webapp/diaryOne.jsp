@@ -1,3 +1,4 @@
+<%@page import="org.mariadb.jdbc.export.Prepare"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import ="java.sql.*" %>
 <%@page import="java.net.URLEncoder"%>
@@ -136,9 +137,42 @@
 				</table>
 				<a href="/diary/updateDiaryForm.jsp?diaryDate=<%=rs2.getString("diaryDate") %>" class="btn btn-outline-danger">글 수정</a>
 				<a href="/diary/deleteDiaryForm.jsp?diaryDate=<%=rs2.getString("diaryDate") %>" class="btn btn-outline-danger">글 삭제</a>
+				<a href="/diary/lunchOne.jsp?diaryDate=<%=rs2.getString("diaryDate") %>" class="btn btn-outline-danger">음식</a>
 				<% 
 					}
 				%>
+				
+				<div>
+					<form method="post" action="/diary/addCommentAction.jsp">
+						<input type="hidden" name="diaryDate" value="<%=diaryDate%>">
+						<textarea rows="2" cols="50" name="memo"></textarea>
+						<button type="submit">댓글입력</button>
+					</form>
+				</div>
+				<%
+					String sql3="select comment_no commentNo, diary_date diaryDate, memo, create_date createDate from comment where diary_date = ?";
+					PreparedStatement stmt3 = null;
+					ResultSet rs3 = null;
+					
+					stmt3 = conn.prepareStatement(sql3);
+					stmt3.setString(1, diaryDate);
+					System.out.println("diaryOne stmt3 --> "+stmt3);
+					rs3 = stmt3.executeQuery();
+					
+				%>
+				<table border ="1">
+					<%
+						while(rs3.next()){
+					%>
+							<tr>
+								<td><%=rs3.getString("memo")%></td>
+								<td><%=rs3.getString("createDate")%></td>
+								<td><a href='/diary/deleteComment.jsp?commentNo=<%=rs3.getInt("commentNo")%>'>삭제</a></td>
+							</tr>
+					<%		
+						}
+					%>
+				</table>
 			</div>
 			<div class="col-2"></div>
 		</div>
