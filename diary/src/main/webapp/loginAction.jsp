@@ -36,7 +36,7 @@
 	// null 이라면 로그아웃상태, != 로그인 상태
 	System.out.println("loginForm loginMember-->"+loginMember);
 	
-	//loginForm페이즌ㄴ 
+	//loginForm페이즌
 	if(loginMember != null){
 		response.sendRedirect("/diary/diary.jsp?");
 		return;
